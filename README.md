@@ -45,6 +45,12 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
+## DB
+
+```bash
+$ docker-compose up -d
+```
+
 ## Test
 
 ```bash
