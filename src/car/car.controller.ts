@@ -32,7 +32,7 @@ export class CarController {
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateCarDto: UpdateCarDto) {
-    return this.carService.update(+id, updateCarDto);
+    return this.carService.update(id, updateCarDto);
   }
 
   @Delete(':id')

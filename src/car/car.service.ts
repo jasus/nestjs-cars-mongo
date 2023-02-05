@@ -54,8 +54,18 @@ export class CarService {
     return car;
   }
 
-  update(id: number, updateCarDto: UpdateCarDto) {
-    return `This action updates a #${id} car`;
+  async update(id: string, updateCarDto: UpdateCarDto) {
+    const car: Car = await this.findOne(id);
+
+    try {
+      await car.updateOne(updateCarDto);
+
+      return { ...car.toJSON(), ...updateCarDto };
+    } catch (error) {
+      throw new InternalServerErrorException(
+        `Car can not be updated - Check server logs ${JSON.stringify(error)}`,
+      );
+    }
   }
 
   remove(id: number) {
