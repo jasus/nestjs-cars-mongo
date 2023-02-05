@@ -68,7 +68,12 @@ export class CarService {
     }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} car`;
+  async remove(id: string) {
+    const { deletedCount } = await this.carModel.deleteOne({ _id: id });
+
+    if (deletedCount === 0) {
+      throw new NotFoundException(`Car with id '${id}' not found`);
+    }
+    return;
   }
 }
