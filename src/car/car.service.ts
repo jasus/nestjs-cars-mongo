@@ -2,9 +2,10 @@ import {
   BadRequestException,
   Injectable,
   InternalServerErrorException,
+  NotFoundException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { isValidObjectId, Model } from 'mongoose';
 import { CreateCarDto } from './dto/create-car.dto';
 import { UpdateCarDto } from './dto/update-car.dto';
 import { Car } from './entities/car.entity';
@@ -34,12 +35,23 @@ export class CarService {
     }
   }
 
-  findAll() {
-    return `This action returns all car`;
+  async findAll() {
+    const cars = await this.carModel.find().exec();
+    return cars;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} car`;
+  async findOne(id: string) {
+    let car = null;
+
+    if (isValidObjectId(id)) {
+      car = await this.carModel.findById(id);
+    }
+
+    if (car === null) {
+      throw new NotFoundException(`Car with id '${id}' not found`);
+    }
+
+    return car;
   }
 
   update(id: number, updateCarDto: UpdateCarDto) {
